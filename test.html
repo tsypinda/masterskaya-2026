@@ -18,14 +18,22 @@
     </style>
   </head>
   <body>
-    <p><a href="index.html">← Вернуться к прототипу</a></p>
-    <h1>Тестирование поиска и синонимов</h1>
-    <p>Коридорные тест-кейсы для проверки поисковой логики MVP.</p>
-    <div id="summary" class="summary" role="status" aria-live="polite"></div>
-    <div id="tests"></div>
+    <main id="adminTests" hidden>
+      <p><a href="index.html">← Вернуться к прототипу</a></p>
+      <h1>Тестирование поиска и синонимов</h1>
+      <p>Коридорные тест-кейсы для проверки поисковой логики MVP.</p>
+      <div id="summary" class="summary" role="status" aria-live="polite"></div>
+      <div id="tests"></div>
+    </main>
 
     <script src="search-core.js"></script>
     <script>
+      if (sessionStorage.getItem("bankBotAdmin") !== "true") {
+        window.location.replace("index.html");
+      } else {
+        document.getElementById("adminTests").hidden = false;
+      }
+
       const items = [
         { id: "money-not-arrived", title: "Не пришли деньги", categoryName: "Переводы", aliases: ["перевод не поступил", "средства не пришли", "не произошло зачисление", "не произошел возврат", "не произошёл возврат", "не вернули деньги", "платеж не дошёл"], answer: "Статус перевода" },
         { id: "block-card", title: "Как заблокировать карту?", categoryName: "Карты", aliases: ["потерял карту", "украли карту"], answer: "Блокировка карты" },
@@ -43,22 +51,24 @@
         { query: "абсолютно неизвестный запрос", expected: null }
       ];
 
-      let passed = 0;
-      const testsElement = document.getElementById("tests");
-      cases.forEach((testCase) => {
-        const results = SearchCore.rankSearchResults(testCase.query, items);
-        const actual = results[0]?.id || null;
-        const success = actual === testCase.expected;
-        if (success) passed += 1;
-        const test = document.createElement("article");
-        test.className = `test ${success ? "pass" : "fail"}`;
-        test.innerHTML = `<strong>${success ? "PASS" : "FAIL"}:</strong> <code>${testCase.query}</code><br>Ожидалось: ${testCase.expected || "нет результатов"}; получено: ${actual || "нет результатов"}${results[0] ? ` (${results[0].relevance}%)` : ""}`;
-        testsElement.appendChild(test);
-      });
+      if (sessionStorage.getItem("bankBotAdmin") === "true") {
+        let passed = 0;
+        const testsElement = document.getElementById("tests");
+        cases.forEach((testCase) => {
+          const results = SearchCore.rankSearchResults(testCase.query, items);
+          const actual = results[0]?.id || null;
+          const success = actual === testCase.expected;
+          if (success) passed += 1;
+          const test = document.createElement("article");
+          test.className = `test ${success ? "pass" : "fail"}`;
+          test.innerHTML = `<strong>${success ? "PASS" : "FAIL"}:</strong> <code>${testCase.query}</code><br>Ожидалось: ${testCase.expected || "нет результатов"}; получено: ${actual || "нет результатов"}${results[0] ? ` (${results[0].relevance}%)` : ""}`;
+          testsElement.appendChild(test);
+        });
 
-      const summary = document.getElementById("summary");
-      summary.className = `summary ${passed === cases.length ? "" : "failed"}`;
-      summary.textContent = `${passed} из ${cases.length} тестов пройдено`;
+        const summary = document.getElementById("summary");
+        summary.className = `summary ${passed === cases.length ? "" : "failed"}`;
+        summary.textContent = `${passed} из ${cases.length} тестов пройдено`;
+      }
     </script>
   </body>
 </html>

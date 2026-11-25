@@ -99,6 +99,7 @@ const HISTORY_KEY = "bankBotHistory";
 const ANALYTICS_KEY = "bankBotAnalytics";
 let currentMessages = [];
 let currentSessionStarted = new Date().toISOString();
+let isAdmin = sessionStorage.getItem("bankBotAdmin") === "true";
 
 function escapeHtml(value) {
   return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -222,7 +223,12 @@ function searchRequest(query) {
   const normalized = query.trim();
   if (!normalized) {
     showToast("Введите ключевой запрос");
-    document.querySelector("#searchInput, #inlineSearchInput")?.focus();
+    document.getElementById("searchInput").focus();
+    return;
+  }
+
+  if (normalized.toLocaleLowerCase("ru-RU") === "admin") {
+    enableAdminMode();
     return;
   }
 
@@ -248,7 +254,7 @@ function searchRequest(query) {
     <div class="option-grid">${matches.slice(0, 4).map((question) => `
       <button class="option-button ranked-option" type="button" data-answer="${question.id}">
         <span>${question.title}</span>
-        <small>Релевантность: ${question.relevance}%</small>
+        ${isAdmin ? `<small>Релевантность: ${question.relevance}%</small>` : ""}
       </button>
     `).join("")}</div>
     ${alternativesMarkup()}
@@ -294,16 +300,8 @@ function showCategories() {
 function showSearchAgain() {
   removeStarter();
   addBotMessage("Введите уточнённый запрос. Например: «не произошел возврат».");
-  const block = document.createElement("div");
-  block.className = "options-block";
-  block.innerHTML = `
-    <label class="search-box" for="inlineSearchInput">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
-      <input id="inlineSearchInput" type="search" placeholder="Уточните ваш вопрос" autocomplete="off" />
-    </label>`;
-  chatBody.appendChild(block);
-  const input = document.getElementById("inlineSearchInput");
-  input.addEventListener("keydown", (event) => { if (event.key === "Enter") searchRequest(input.value); });
+  const input = document.getElementById("searchInput");
+  input.value = "";
   input.focus();
   scrollToEnd();
 }
@@ -344,10 +342,6 @@ function endDialog() {
 function starterMarkup() {
   return `
     <div class="starter-panel" id="starterPanel">
-      <label class="search-box" for="searchInput">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
-        <input id="searchInput" type="search" placeholder="Например: не произошел возврат" autocomplete="off" />
-      </label>
       <p class="section-label">Популярные категории</p>
       <div class="category-grid" id="categoryGrid"></div>
     </div>`;
@@ -372,9 +366,6 @@ function restart() {
 
 function bindInitialSearch() {
   const input = document.getElementById("searchInput");
-  input?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") searchRequest(input.value);
-  });
   input?.focus();
 }
 
@@ -432,10 +423,45 @@ function showToast(text) {
   showToast.timer = setTimeout(() => toast.classList.remove("visible"), 2200);
 }
 
+function updateAdminUi() {
+  document.querySelectorAll("[data-admin-only]").forEach((element) => {
+    element.hidden = !isAdmin;
+  });
+  document.body.classList.toggle("admin-mode", isAdmin);
+}
+
+function enableAdminMode() {
+  if (isAdmin) {
+    showToast("Режим администратора уже включён");
+    return;
+  }
+  isAdmin = true;
+  sessionStorage.setItem("bankBotAdmin", "true");
+  track("admin_mode_enabled");
+  updateAdminUi();
+  showToast("Режим администратора включён");
+}
+
+function disableAdminMode() {
+  isAdmin = false;
+  sessionStorage.removeItem("bankBotAdmin");
+  track("admin_mode_disabled");
+  updateAdminUi();
+  showToast("Режим администратора выключен");
+}
+
 renderCategoryGrid(document.getElementById("categoryGrid"));
 bindInitialSearch();
+updateAdminUi();
 
 document.getElementById("restartButton").addEventListener("click", restart);
+document.getElementById("adminExitButton").addEventListener("click", disableAdminMode);
+document.getElementById("searchForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = document.getElementById("searchInput");
+  searchRequest(input.value);
+  input.value = "";
+});
 document.getElementById("historyButton").addEventListener("click", showHistory);
 document.getElementById("analyticsButton").addEventListener("click", showAnalytics);
 document.getElementById("exportAnalytics").addEventListener("click", exportAnalytics);

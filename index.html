@@ -19,9 +19,11 @@
         </div>
         <div class="header-actions">
           <button class="icon-button" id="historyButton" type="button" title="История диалогов" aria-label="История диалогов">⌛</button>
-          <button class="icon-button" id="analyticsButton" type="button" title="Аналитика" aria-label="Аналитика">📊</button>
-          <a class="icon-button test-link" href="test.html" title="Тестирование" aria-label="Открыть тестирование">✓</a>
-          <button class="icon-button" id="restartButton" type="button" title="Начать заново" aria-label="Начать заново">
+          <button class="icon-button" id="analyticsButton" data-admin-only hidden type="button" title="Аналитика" aria-label="Аналитика">📊</button>
+          <a class="icon-button test-link" data-admin-only hidden href="test.html" title="Тестирование" aria-label="Открыть тестирование">✓</a>
+          <span class="admin-badge" data-admin-only hidden>Администратор</span>
+          <button class="admin-exit-button" id="adminExitButton" data-admin-only hidden type="button">Выйти</button>
+          <button class="icon-button" id="restartButton" data-admin-only hidden type="button" title="Начать заново" aria-label="Начать заново">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20 11a8.1 8.1 0 1 1-2.4-5.7L20 7.7M20 3v4.7h-4.7" />
             </svg>
@@ -40,17 +42,22 @@
         </div>
 
         <div class="starter-panel" id="starterPanel">
-          <label class="search-box" for="searchInput">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
-            </svg>
-            <input id="searchInput" type="search" placeholder="Например: не пришли деньги" autocomplete="off" />
-          </label>
-
           <p class="section-label">Популярные категории</p>
           <div class="category-grid" id="categoryGrid"></div>
         </div>
       </section>
+
+      <form class="persistent-search" id="searchForm" role="search">
+        <div class="search-controls">
+          <label class="search-box" for="searchInput">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+            </svg>
+            <input id="searchInput" type="search" placeholder="Например: не пришли деньги" autocomplete="off" aria-label="Поиск по ключевым словам" />
+          </label>
+          <button class="search-submit" type="submit">Найти</button>
+        </div>
+      </form>
 
       <footer class="chat-footer">
         <button class="operator-button" id="operatorButton" type="button">
@@ -72,7 +79,7 @@
           </svg>
         </div>
         <h2 id="operatorTitle">Перейти к оператору?</h2>
-        <p>Оператор ответит вам в течение <strong>≈ 5 минут</strong>. Мы сохраним историю переписки.</p>
+        <p>Оператор ответит вам в течение <strong>≈ 5 минут</strong>. Бот может помочь быстрее — без ожидания оператора. При необходимости вы всегда сможете обратиться к сотруднику. История переписки сохранится.</p>
         <div class="modal-actions">
           <button class="secondary-button" id="stayWithBot" type="button">Остаться с ботом</button>
           <button class="primary-button" id="confirmOperator" type="button">Перейти</button>

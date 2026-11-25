@@ -35,6 +35,10 @@ button {
   cursor: pointer;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .skip-link {
   position: fixed;
   left: 12px;
@@ -60,7 +64,7 @@ button {
   height: min(820px, calc(100vh - 32px));
   min-height: 560px;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
   overflow: hidden;
   background: var(--surface);
   border: 1px solid rgba(30, 55, 70, 0.12);
@@ -82,6 +86,25 @@ button {
   display: flex;
   align-items: center;
   gap: 3px;
+}
+
+.admin-badge {
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: #fff5d6;
+  color: #7a5200;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-exit-button {
+  min-height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .test-link {
@@ -239,6 +262,38 @@ button {
   background: white;
   color: #86949b;
   transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.search-controls .search-box {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-submit {
+  min-width: 76px;
+  padding: 0 14px;
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.search-submit:hover {
+  border-color: var(--blue-dark);
+  background: var(--blue-dark);
+}
+
+.persistent-search {
+  padding: 10px 22px 4px;
+  background: #fbfcfd;
 }
 
 .search-box:focus-within {
@@ -434,6 +489,10 @@ button {
   font-size: 11px;
 }
 
+body:not(.admin-mode) .ranked-option small {
+  display: none;
+}
+
 .operator-button,
 .end-button,
 .primary-button,
@@ -595,6 +654,10 @@ button {
   .chat-footer {
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  .persistent-search {
+    padding: 10px 14px 4px;
   }
 
   .chat-body {
