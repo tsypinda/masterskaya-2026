@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Банк — чат-помощник</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#chatBody">Перейти к диалогу</a>
+    <main class="chat-app" aria-label="Чат-помощник банка">
+      <header class="chat-header">
+        <div class="bank-brand">
+          <div class="bank-logo" aria-hidden="true">Б</div>
+          <div>
+            <h1>Банк</h1>
+            <p><span class="status-dot"></span> Помощник онлайн</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-button" id="historyButton" type="button" title="История диалогов" aria-label="История диалогов">⌛</button>
+          <button class="icon-button" id="analyticsButton" type="button" title="Аналитика" aria-label="Аналитика">📊</button>
+          <a class="icon-button test-link" href="test.html" title="Тестирование" aria-label="Открыть тестирование">✓</a>
+          <button class="icon-button" id="restartButton" type="button" title="Начать заново" aria-label="Начать заново">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 11a8.1 8.1 0 1 1-2.4-5.7L20 7.7M20 3v4.7h-4.7" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="chat-body" id="chatBody" aria-live="polite">
+        <div class="chat-date">Сегодня</div>
+        <div class="message-row bot-row">
+          <div class="bot-avatar" aria-hidden="true">Б</div>
+          <div class="message bot-message">
+            <p>Здравствуйте! Я могу помочь с картами, переводами, вкладами и другими вопросами.</p>
+            <p>Выберите категорию или напишите свой вопрос.</p>
+          </div>
+        </div>
+
+        <div class="starter-panel" id="starterPanel">
+          <label class="search-box" for="searchInput">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+            </svg>
+            <input id="searchInput" type="search" placeholder="Например: не пришли деньги" autocomplete="off" />
+          </label>
+
+          <p class="section-label">Популярные категории</p>
+          <div class="category-grid" id="categoryGrid"></div>
+        </div>
+      </section>
+
+      <footer class="chat-footer">
+        <button class="operator-button" id="operatorButton" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 13v-1a8 8 0 0 1 16 0v1M4 13v4a2 2 0 0 0 2 2h2v-7H6a2 2 0 0 0-2 2Zm16 0v4a2 2 0 0 1-2 2h-2v-7h2a2 2 0 0 1 2 2ZM16 19c0 1.1-.9 2-2 2h-3" />
+          </svg>
+          Связаться с оператором
+        </button>
+        <button class="end-button" id="endButton" type="button">Завершить диалог</button>
+      </footer>
+    </main>
+
+    <div class="modal-backdrop" id="operatorModal" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="operatorTitle">
+        <button class="modal-close" id="closeModal" type="button" aria-label="Закрыть">×</button>
+        <div class="operator-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 13v-1a8 8 0 0 1 16 0v1M4 13v4a2 2 0 0 0 2 2h2v-7H6a2 2 0 0 0-2 2Zm16 0v4a2 2 0 0 1-2 2h-2v-7h2a2 2 0 0 1 2 2Z" />
+          </svg>
+        </div>
+        <h2 id="operatorTitle">Перейти к оператору?</h2>
+        <p>Оператор ответит вам в течение <strong>≈ 5 минут</strong>. Мы сохраним историю переписки.</p>
+        <div class="modal-actions">
+          <button class="secondary-button" id="stayWithBot" type="button">Остаться с ботом</button>
+          <button class="primary-button" id="confirmOperator" type="button">Перейти</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div class="modal-backdrop" id="historyModal" hidden>
+      <section class="modal wide-modal" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
+        <button class="modal-close" data-close-modal="historyModal" type="button" aria-label="Закрыть">×</button>
+        <h2 id="historyTitle">История диалогов</h2>
+        <div class="history-list" id="historyList"></div>
+        <div class="modal-actions single-action">
+          <button class="secondary-button" id="clearHistory" type="button">Очистить историю</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="analyticsModal" hidden>
+      <section class="modal wide-modal" role="dialog" aria-modal="true" aria-labelledby="analyticsTitle">
+        <button class="modal-close" data-close-modal="analyticsModal" type="button" aria-label="Закрыть">×</button>
+        <h2 id="analyticsTitle">Аналитика прототипа</h2>
+        <div class="analytics-grid" id="analyticsGrid"></div>
+        <div class="modal-actions single-action">
+          <button class="primary-button" id="exportAnalytics" type="button">Экспорт в CSV</button>
+        </div>
+      </section>
+    </div>
+
+    <script src="search-core.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
