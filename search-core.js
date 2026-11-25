@@ -51,10 +51,11 @@ const SearchCore = (() => {
     return items
       .map((item) => {
         const title = normalize(item.title);
+        const question = normalize(item.question);
         const answer = normalize(item.answer);
         const category = normalize(item.categoryName);
         const aliases = (item.aliases || []).map(normalize).join(" ");
-        const searchable = normalize(`${title} ${aliases} ${answer} ${category}`);
+        const searchable = normalize(`${title} ${question} ${aliases} ${answer} ${category}`);
         let score = 0;
 
         if (title === queryNormalized || aliases.split(" ").includes(queryNormalized)) {
@@ -67,6 +68,7 @@ const SearchCore = (() => {
         queryWords.forEach((word) => {
           if (!word) return;
           if (title.includes(word)) score += 8;
+          if (question.includes(word)) score += 10;
           if (aliases.includes(word)) score += 12;
           if (category.includes(word)) score += 5;
           if (answer.includes(word)) score += 3;

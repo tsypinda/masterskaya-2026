@@ -7,18 +7,21 @@ const categories = [
       {
         id: "block-card",
         title: "Как заблокировать карту?",
+        question: "Как заблокировать карту?",
         aliases: ["потерял карту", "украли карту", "заблокировать карточку", "заморозить карту"],
         answer: "Вы можете заблокировать карту в приложении: раздел «Карты» → выберите карту → «Заблокировать». Для срочной блокировки позвоните в банк."
       },
       {
         id: "card-not-arrived",
         title: "Карта ещё не пришла",
+        question: "Что делать, если карта ещё не пришла?",
         aliases: ["нет пластика", "карта не доставлена", "новая карта не пришла", "ожидаю карту"],
         answer: "Обычно доставка занимает 3–7 рабочих дней. Проверьте статус доставки в приложении. Если срок истёк, оформим повторную выдачу."
       },
       {
         id: "card-limit",
         title: "Изменить лимит по карте",
+        question: "Как изменить лимит по карте?",
         aliases: ["предел перевода", "ограничение карты", "увеличить лимит", "уменьшить лимит"],
         answer: "Лимиты перевода можно изменить в разделе «Карты» → «Настройки безопасности» → «Лимиты». Изменения подтверждаются в приложении."
       }
@@ -32,18 +35,21 @@ const categories = [
       {
         id: "money-not-arrived",
         title: "Не пришли деньги",
+        question: "Что делать, если деньги не пришли?",
         aliases: ["перевод не поступил", "средства не пришли", "не произошло зачисление", "не произошел возврат", "не произошёл возврат", "не вернули деньги", "платеж не дошёл", "платёж не дошёл"],
         answer: "Проверьте статус перевода в истории операций. При статусе «В обработке» дождитесь проверки. При статусе «Отклонён» обратитесь к отправителю за номером операции."
       },
       {
         id: "cancel-transfer",
         title: "Отменить перевод",
+        question: "Как отменить перевод?",
         aliases: ["отменить платеж", "отменить платёж", "вернуть перевод", "отозвать перевод"],
         answer: "Незавершённый перевод можно отменить в истории операций. Завершённый перевод можно вернуть только по заявлению получателя."
       },
       {
         id: "transfer-limit",
         title: "Лимит на переводы",
+        question: "Как изменить лимит на переводы?",
         aliases: ["сколько могу перевести", "максимальный перевод", "лимиты переводов"],
         answer: "Лимиты зависят от способа перевода и подтверждения личности. Актуальная сумма отображается перед подтверждением."
       }
@@ -57,12 +63,14 @@ const categories = [
       {
         id: "open-deposit",
         title: "Как открыть вклад?",
+        question: "Как открыть вклад?",
         aliases: ["открыть депозит", "начать накопительный счет", "начать накопительный счёт"],
         answer: "Откройте раздел «Вклады» в приложении, выберите срок и условия. Вклад можно открыть со счёта без посещения офиса."
       },
       {
         id: "close-deposit",
         title: "Как закрыть вклад?",
+        question: "Как закрыть вклад?",
         aliases: ["снять вклад", "закрыть депозит", "забрать накопления"],
         answer: "Закрыть вклад можно в приложении в разделе «Вклады». При досрочном закрытии ставка может пересчитываться."
       }
@@ -70,18 +78,20 @@ const categories = [
   },
   {
     id: "account",
-    name: "Счёт и операции",
+    name: "Счета и операции",
     icon: "С",
     questions: [
       {
         id: "statement",
         title: "Получить выписку",
+        question: "Как получить выписку?",
         aliases: ["история операций", "справка по счёту", "справка по счету", "скачать выписку"],
         answer: "Выписку можно скачать: «История» → «Выписка» → выберите период и формат PDF или Excel."
       },
       {
         id: "unknown-payment",
         title: "Незнакомое списание",
+        question: "Что делать, если обнаружено незнакомое списание?",
         aliases: ["не узнаю платёж", "не знаю списание", "неверное списание", "сняли деньги без меня"],
         answer: "Проверьте название и дату операции в истории. Если платёж не узнаёте, заблокируйте карту и оспорьте операцию в разделе «Помощь»."
       }
@@ -189,7 +199,7 @@ function showCategoryQuestions(categoryId) {
   block.className = "options-block";
   block.innerHTML = `
     <div class="option-grid">${category.questions.map((question) =>
-      `<button class="option-button" type="button" data-answer="${question.id}">${question.title}</button>`
+      `<button class="option-button" type="button" data-answer="${question.id}">${question.question}</button>`
     ).join("")}</div>
     ${alternativesMarkup()}
   `;
@@ -202,7 +212,7 @@ function showAnswer(answerId) {
   if (!question) return;
   track("answer_selected", { answerId, title: question.title });
   document.querySelectorAll(".options-block").forEach((block) => block.remove());
-  addUserMessage(question.title);
+  addUserMessage(question.question);
   addBotMessage(question.answer);
 
   const block = document.createElement("div");
@@ -211,7 +221,6 @@ function showAnswer(answerId) {
     <p class="section-label">Подошёл ли ответ?</p>
     <div class="action-row">
       <button class="action-button primary-action" type="button" data-action="answer-yes">Да, ответ помог</button>
-      <button class="action-button" type="button" data-action="operator">Нет, оператору</button>
       <button class="action-button" type="button" data-action="search-again">Переформулировать</button>
       <button class="back-button" type="button" data-action="categories">К категориям</button>
     </div>`;
@@ -253,7 +262,7 @@ function searchRequest(query) {
   block.innerHTML = `
     <div class="option-grid">${matches.slice(0, 4).map((question) => `
       <button class="option-button ranked-option" type="button" data-answer="${question.id}">
-        <span>${question.title}</span>
+        <span>${question.question}</span>
         ${isAdmin ? `<small>Релевантность: ${question.relevance}%</small>` : ""}
       </button>
     `).join("")}</div>
@@ -269,7 +278,6 @@ function alternativesMarkup() {
     <div class="action-row">
       <button class="action-button" type="button" data-action="search-again">Изменить запрос</button>
       <button class="action-button" type="button" data-action="categories">Посмотреть категории</button>
-      <button class="action-button" type="button" data-action="operator">Связаться с оператором</button>
     </div>`;
 }
 
@@ -491,7 +499,6 @@ document.addEventListener("click", (event) => {
 
   const action = event.target.closest("[data-action]")?.dataset.action;
   if (action === "categories") showCategories();
-  if (action === "operator") openOperatorModal();
   if (action === "search-again") showSearchAgain();
   if (action === "answer-yes") {
     track("answer_helpful");

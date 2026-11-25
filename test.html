@@ -35,18 +35,27 @@
       }
 
       const items = [
-        { id: "money-not-arrived", title: "Не пришли деньги", categoryName: "Переводы", aliases: ["перевод не поступил", "средства не пришли", "не произошло зачисление", "не произошел возврат", "не произошёл возврат", "не вернули деньги", "платеж не дошёл"], answer: "Статус перевода" },
-        { id: "block-card", title: "Как заблокировать карту?", categoryName: "Карты", aliases: ["потерял карту", "украли карту"], answer: "Блокировка карты" },
-        { id: "statement", title: "Получить выписку", categoryName: "Счёт и операции", aliases: ["история операций", "справка по счёту"], answer: "Выписка" },
-        { id: "open-deposit", title: "Как открыть вклад?", categoryName: "Вклады", aliases: ["открыть депозит", "начать накопительный счёт"], answer: "Вклад" }
+        { id: "block-card", title: "Как заблокировать карту?", question: "Как заблокировать карту?", categoryName: "Карты", aliases: ["потерял карту", "украли карту"], answer: "Заблокируйте карту в приложении" },
+        { id: "card-not-arrived", title: "Карта ещё не пришла", question: "Что делать, если карта ещё не пришла?", categoryName: "Карты", aliases: ["нет пластика", "карта не доставлена"], answer: "Проверьте статус доставки" },
+        { id: "card-limit", title: "Изменить лимит по карте", question: "Как изменить лимит по карте?", categoryName: "Карты", aliases: ["предел перевода", "ограничение карты"], answer: "Измените лимит в настройках" },
+        { id: "money-not-arrived", title: "Не пришли деньги", question: "Что делать, если деньги не пришли?", categoryName: "Переводы", aliases: ["перевод не поступил", "не произошел возврат"], answer: "Проверьте статус перевода" },
+        { id: "cancel-transfer", title: "Отменить перевод", question: "Как отменить перевод?", categoryName: "Переводы", aliases: ["отменить платеж", "вернуть перевод"], answer: "Проверьте статус перевода" },
+        { id: "transfer-limit", title: "Лимит на переводы", question: "Как изменить лимит на переводы?", categoryName: "Переводы", aliases: ["максимальный перевод", "лимиты переводов"], answer: "Проверьте лимиты" },
+        { id: "open-deposit", title: "Открыть вклад", question: "Как открыть вклад?", categoryName: "Вклады", aliases: ["открыть депозит", "накопительный счет"], answer: "Откройте раздел вкладов" },
+        { id: "close-deposit", title: "Закрыть вклад", question: "Как закрыть вклад?", categoryName: "Вклады", aliases: ["снять вклад", "закрыть депозит"], answer: "Закройте вклад в приложении" },
+        { id: "statement", title: "Получить выписку", question: "Как получить выписку?", categoryName: "Счета и операции", aliases: ["история операций", "справка по счету"], answer: "Скачайте выписку" },
+        { id: "unknown-payment", title: "Незнакомое списание", question: "Что делать, если обнаружено незнакомое списание?", categoryName: "Счета и операции", aliases: ["не узнаю платеж", "сняли деньги без меня"], answer: "Оспорьте операцию" }
       ];
 
       const cases = [
         { query: "не произошел возврат", expected: "money-not-arrived" },
         { query: "не произошёл возврат", expected: "money-not-arrived" },
         { query: "платеж не дошёл", expected: "money-not-arrived" },
+        { query: "что делать если карта еще не пришла", expected: "card-not-arrived" },
         { query: "потерял карту", expected: "block-card" },
+        { query: "как изменить лимит на переводы", expected: "transfer-limit" },
         { query: "справка по счету", expected: "statement" },
+        { query: "что делать если обнаружено незнакомое списание", expected: "unknown-payment" },
         { query: "открыть депозит", expected: "open-deposit" },
         { query: "абсолютно неизвестный запрос", expected: null }
       ];
