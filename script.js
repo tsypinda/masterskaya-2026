@@ -263,7 +263,7 @@ function searchRequest(query) {
     <div class="option-grid">${matches.slice(0, 4).map((question) => `
       <button class="option-button ranked-option" type="button" data-answer="${question.id}">
         <span>${question.question}</span>
-        ${isAdmin ? `<small>Релевантность: ${question.relevance}%</small>` : ""}
+        <small class="admin-relevance" ${isAdmin ? "" : "hidden"}>Релевантность: ${question.relevance}%</small>
       </button>
     `).join("")}</div>
     ${alternativesMarkup()}
@@ -345,6 +345,21 @@ function endDialog() {
   document.querySelectorAll(".options-block").forEach((block) => block.remove());
   addBotMessage("Спасибо за обращение! Диалог завершён.");
   showToast("Диалог завершён");
+
+  window.setTimeout(() => {
+    currentMessages = [];
+    currentSessionStarted = new Date().toISOString();
+    addBotMessage("Здравствуйте! Я могу помочь с картами, переводами, вкладами и другими вопросами. Выберите категорию или напишите свой вопрос.");
+    const starter = document.createElement("div");
+    starter.className = "starter-panel";
+    starter.id = "starterPanel";
+    starter.innerHTML = `
+      <p class="section-label">Популярные категории</p>
+      <div class="category-grid" id="categoryGrid"></div>`;
+    chatBody.appendChild(starter);
+    renderCategoryGrid(document.getElementById("categoryGrid"));
+    scrollToEnd();
+  }, 700);
 }
 
 function starterMarkup() {
@@ -433,6 +448,9 @@ function showToast(text) {
 
 function updateAdminUi() {
   document.querySelectorAll("[data-admin-only]").forEach((element) => {
+    element.hidden = !isAdmin;
+  });
+  document.querySelectorAll(".admin-relevance").forEach((element) => {
     element.hidden = !isAdmin;
   });
   document.body.classList.toggle("admin-mode", isAdmin);

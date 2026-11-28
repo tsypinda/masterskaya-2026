@@ -47,15 +47,17 @@
         </div>
       </section>
 
-      <form class="persistent-search" id="searchForm" role="search">
+      <form class="persistent-search" id="searchForm">
         <div class="search-controls">
           <label class="search-box" for="searchInput">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
-            </svg>
-            <input id="searchInput" type="search" placeholder="Например: не пришли деньги" autocomplete="off" aria-label="Поиск по ключевым словам" />
+            <input id="searchInput" type="text" placeholder="Введите свой вопрос" autocomplete="off" aria-label="Введите свой вопрос" />
           </label>
-          <button class="search-submit" type="submit">Найти</button>
+          <button class="search-submit" type="submit" aria-label="Отправить вопрос" title="Отправить вопрос">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 2 11 13" />
+              <path d="m22 2-7 20-4-9-9-4Z" />
+            </svg>
+          </button>
         </div>
       </form>
 
